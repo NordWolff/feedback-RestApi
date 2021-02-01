@@ -30,7 +30,6 @@ public class FeedbackController {
     @GetMapping
     public ResponseEntity getFeedbacks() {
         List<Feedback> feedbacks = feedbackService.getFeedbacks();
-
         return new ResponseEntity(feedbacks, HttpStatus.OK);
     }
 
