@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,15 +73,23 @@ public class FeedbackController {
         return new ResponseEntity(feedbackByUsername, HttpStatus.OK);
     }
 
-    @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})
-    public ResponseEntity addOrChangeFeedback(@Valid @RequestBody Feedback feedback) {
+    @PutMapping(value = "/edit")
+    public ResponseEntity changeFeedback(@Valid @RequestBody Feedback feedback) {
         //FeedbackMapper.MAPPER.toFeedback(feedback);
         feedbackService.setFeedback(feedback);
         return new ResponseEntity(HttpStatus.OK);
 
     }
 
-    @DeleteMapping(value = "/{id}")
+    @PostMapping(value = "/add")
+    public ResponseEntity addFeedback(@Valid @RequestBody Feedback feedback) {
+        //FeedbackMapper.MAPPER.toFeedback(feedback);
+        feedbackService.setFeedback(feedback);
+        return new ResponseEntity(HttpStatus.OK);
+
+    }
+
+    @DeleteMapping(value = "/remove/{id}")
     public ResponseEntity deleteFeedback(@PathVariable Integer id) {
         try {
             feedbackService.deleteCustomer(id);
@@ -88,5 +97,11 @@ public class FeedbackController {
             //When already deleted, it's ok!
         }
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/search/{searchTerm}")
+    public ResponseEntity getSearchAllWithLineId(@PathVariable String searchTerm) {
+         feedbackService.searchAllFeedbackByLineId(searchTerm);
+         return new ResponseEntity(HttpStatus.OK);
     }
 }

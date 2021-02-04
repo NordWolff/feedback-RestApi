@@ -3,6 +3,7 @@ package de.dta.feed.V01.service;
 import de.dta.feed.V01.model.Feedback;
 import de.dta.feed.V01.repository.FeedbackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -40,5 +41,11 @@ public class FeedbackService {
 
         List<Feedback> allByUsername = feedbackRepository.findAllByUsername(username);
         return allByUsername;
+    }
+
+    public List<Feedback> searchAllFeedbackByLineId(String searchTerm) {
+        List<Feedback> allByLineId = feedbackRepository.searchAllFeedbackByLineId(searchTerm);
+        return allByLineId;
+
     }
 }
