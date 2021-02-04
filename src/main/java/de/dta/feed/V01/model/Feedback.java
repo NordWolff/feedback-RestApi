@@ -42,10 +42,12 @@ public class Feedback {
 
     @NotNull(message = "KnownError kann nicht leer sein")
     private String knownError;
-    private @DateTimeFormat(pattern = "dd.MM.yyyy")
-    Date published;
+
+    @DateTimeFormat(pattern = "dd.MM.yyyy")
+    private Date published;
 
     private Date edit;
+
     //private Status status; //: DoneStatus;
 
     @NotNull(message = "Author kann nicht leer sein")
