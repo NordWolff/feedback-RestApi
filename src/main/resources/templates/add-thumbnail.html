@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>add Thumbnail</title>
+</head>
+<body>
+<form action="#" th:action="@{/thumbnail/save}" th:object="${thumbnail}"
+      method="post">
+    <fieldset>
+        <input type="submit" id="submitButton" th:value="Save">
+        <input type="reset" id="resetButton" name="reset" th:value="Reset"/>
+        <table>
+            <thead>
+            <tr>
+                <th> Title</th>
+                <th> Author</th>
+            </tr>
+            </thead>
+            <tbody th:if="${thumbnail!=null}">
+            <tr th:each="thumbnail, itemStat : *{thumbnails}">
+                <td><input th:field="*{thumbnails[__${itemStat.index}__].title}" /></td>
+                <td><input th:field="*{thumbnails[__${itemStat.index}__].url}" /></td>
+            </tr>
+            </tbody>
+        </table>
+    </fieldset>
+</form>
+
+</body>
+</html>

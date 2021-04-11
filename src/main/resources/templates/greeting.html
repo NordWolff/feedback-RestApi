@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Hallo</title>
+
+    <!-- Styles -->
+    <link href="css/page.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light navbar-stick-dark" data-navbar="sticky">
+    <div class="container">
+
+        <div class="navbar-left">
+            <button class="navbar-toggler" type="button">&#9776;</button>
+            <a class="navbar-brand" href="/">
+                <img class="logo-dark" src="/img/logo-dak.png" alt="logo">
+                <img class="logo-light" src="/img/logo-ligt.png" alt="logo">
+            </a>
+        </div>
+
+        <section class="navbar-mobile">
+            <span class="navbar-divider d-mobile-none"></span>
+
+            <ul class="nav nav-navbar">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Menü <span class="arrow"></span></a>
+                    <ul class="nav">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Swagger <span class="arrow"></span></a>
+                            <nav class="nav">
+                                <a class="nav-link" href="/swagger-ui.html">Swagger</a>
+                            </nav>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">API <span class="arrow"></span></a>
+                            <nav class="nav">
+                                <a class="nav-link" href="/api/feedback">All</a>
+                                <a class="nav-link" href="/api/feedback/welcome">Welcome</a>
+                            </nav>
+                        </li>
+
+                    </ul>
+                </li>
+
+            </ul>
+        </section>
+
+        <!--<a class="btn btn-xs btn-round btn-success" href="/login">Login</a>-->
+
+        <div sec:authorize="isAuthenticated()">
+
+            <form method="POST" th:action="@{/logout}">
+                <button class="btn btn-xs btn-round btn-success" type="submit">Logout</button>
+            </form>
+        </div>
+
+        <div sec:authorize="!isAuthenticated()">
+            <a class="btn btn-xs btn-round btn-success" href="/login">Login</a>
+        </div>
+
+
+    </div>
+</nav><!-- /.navbar -->
+
+<p th:text="${greeting}"></p>
+
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row gap-y align-items-center">
+
+            <div class="col-6 col-lg-3">
+                <a href="#"><img src="/img/logo-dak.png" alt="logo"></a>
+            </div>
+
+
+            <div class="col-lg-6">
+                <div class="nav nav-bold nav-uppercase nav-trim justify-content-lg-center">
+                    <a class="nav-link" href="../page/about-1.html">About</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</footer><!-- /.footer -->
+
+
+<!-- Scripts -->
+<script src="/js/page.min.js"></script>
+<script src="/js/script.js"></script>
+
+</body>
+</html>
