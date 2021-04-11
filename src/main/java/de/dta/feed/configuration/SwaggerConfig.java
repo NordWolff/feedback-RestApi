@@ -1,6 +1,5 @@
-package de.dta.feed.V01;
+package de.dta.feed.configuration;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -17,7 +16,7 @@ public class SwaggerConfig {
     public Docket api(){
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("de.dta.feed.V01"))
+                .apis(RequestHandlerSelectors.basePackage("de.dta.feed"))
                 .build();
     };
 }

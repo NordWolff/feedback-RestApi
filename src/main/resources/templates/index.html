@@ -1,5 +1,8 @@
 <!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:lang="${#locale.language}">
 <head>
     <title>Backend</title>
 
@@ -30,8 +33,8 @@
         <section class="navbar-mobile">
             <span class="navbar-divider d-mobile-none"></span>
 
-            <ul class="nav nav-navbar">
-                <li class="nav-item">
+            <ul class="nav nav-navbar" sec:authorize="isAuthenticated()">
+                <li class="nav-item" >
                     <a class="nav-link" href="#">Menü <span class="arrow"></span></a>
                     <ul class="nav">
 
@@ -49,6 +52,12 @@
                                 <a class="nav-link" href="/api/feedback/welcome">Welcome</a>
                             </nav>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">H2 Datenbank <span class="arrow"></span></a>
+                            <nav class="nav">
+                                <a class="nav-link" href="/h2-console">Login</a>
+                            </nav>
+                        </li>
 
                     </ul>
                 </li>
@@ -56,7 +65,19 @@
             </ul>
         </section>
 
-        <a class="btn btn-xs btn-round btn-success" href="https://themeforest.net/item/thesaas-responsive-bootstrap-saas-software-webapp-template/19778599?license=regular&open_purchase_for_item_id=19778599&purchasable=source&ref=thethemeio">Login</a>
+        <!--<a class="btn btn-xs btn-round btn-success" href="/login">Login</a>-->
+
+            <div sec:authorize="isAuthenticated()">
+
+                <form method="POST" th:action="@{/logout}">
+                    <button class="btn btn-xs btn-round btn-success" type="submit">Logout</button>
+                </form>
+            </div>
+
+            <div sec:authorize="!isAuthenticated()">
+                <a class="btn btn-xs btn-round btn-success" href="/login">Login</a>
+            </div>
+
 
     </div>
 </nav><!-- /.navbar -->
@@ -71,6 +92,7 @@
 
                 <h1 class="display-4">DTA-Feed</h1>
                 <p class="lead-2 opacity-90 mt-6">You can see all Feedback from Frontend Angular!</p>
+                <p>Du bist eingeloggt als <span sec:authentication="name" class="text-info text-white">User</span></p>
 
             </div>
         </div>
@@ -83,7 +105,7 @@
 <main class="main-content">
 
     <section class="section bg-gray">
-        <div class="container">
+        <div class="container" sec:authorize="isAuthenticated()">
             <div class="row gap-y">
 
 

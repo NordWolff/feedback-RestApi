@@ -1,8 +1,9 @@
-package de.dta.feed.V01.controller;
+package de.dta.feed.feedback.controller;
 
-import de.dta.feed.V01.model.Feedback;
-import de.dta.feed.V01.model.HelloSpring;
-import de.dta.feed.V01.service.FeedbackService;
+import de.dta.feed.feedback.model.Feedback;
+import de.dta.feed.feedback.model.HelloSpring;
+import de.dta.feed.feedback.model.Thumbnail;
+import de.dta.feed.feedback.service.FeedbackService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -11,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +28,6 @@ public class FeedbackController {
     public HelloSpring sayHello() {
         return new HelloSpring("Spring is Online");
     }
-
 
     @ApiOperation(
             value = "Abrufen aller Feedbacks",
@@ -45,9 +45,9 @@ public class FeedbackController {
             produces = "application/json",
             response = Feedback.class
     )
-    @GetMapping(value = "/id/{id}")
-    public ResponseEntity FeedbackById(@PathVariable Integer id) {
-        Optional<Feedback> feedbackById = feedbackService.getFeedbackById(id);
+    @GetMapping(value = "/id/{feedbackId}")
+    public ResponseEntity FeedbackById(@PathVariable Integer feedbackId) {
+        Optional<Feedback> feedbackById = feedbackService.getFeedbackById(feedbackId);
         return new ResponseEntity(feedbackById, HttpStatus.OK);
     }
 
@@ -74,25 +74,25 @@ public class FeedbackController {
     }
 
     @PutMapping(value = "/edit")
-    public ResponseEntity changeFeedback(@Valid @RequestBody Feedback feedback) {
+    public ResponseEntity editFeedback(@Valid @RequestBody Feedback feedback) {
         //FeedbackMapper.MAPPER.toFeedback(feedback);
-        feedbackService.setFeedback(feedback);
+        List<Thumbnail> thumbnailList = new ArrayList<>();
+        feedback.setThumbnails(thumbnailList);
+        feedbackService.update(feedback);
         return new ResponseEntity(HttpStatus.OK);
-
     }
 
     @PostMapping(value = "/add")
     public ResponseEntity addFeedback(@Valid @RequestBody Feedback feedback) {
         //FeedbackMapper.MAPPER.toFeedback(feedback);
-        feedbackService.setFeedback(feedback);
+        feedbackService.save(feedback);
         return new ResponseEntity(HttpStatus.OK);
-
     }
 
-    @DeleteMapping(value = "/remove/{id}")
-    public ResponseEntity deleteFeedback(@PathVariable Integer id) {
+    @DeleteMapping(value = "/remove/{feedbackId}")
+    public ResponseEntity deleteFeedback(@PathVariable Integer feedbackId) {
         try {
-            feedbackService.deleteCustomer(id);
+            feedbackService.deleteCustomer(feedbackId);
         } catch(EmptyResultDataAccessException emptyResultDataAccessException) {
             //When already deleted, it's ok!
         }
@@ -104,4 +104,5 @@ public class FeedbackController {
          feedbackService.searchAllFeedbackByLineId(searchTerm);
          return new ResponseEntity(HttpStatus.OK);
     }
+
 }

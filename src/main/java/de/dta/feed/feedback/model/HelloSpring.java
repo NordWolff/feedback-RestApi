@@ -1,4 +1,4 @@
-package de.dta.feed.V01.model;
+package de.dta.feed.feedback.model;
 
 public class HelloSpring {
 

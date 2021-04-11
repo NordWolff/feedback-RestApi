@@ -1,11 +1,10 @@
-package de.dta.feed.V01.repository;
+package de.dta.feed.feedback.repository;
 
 
-import de.dta.feed.V01.model.Feedback;
+import de.dta.feed.feedback.model.Feedback;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface FeedbackRepository extends CrudRepository<Feedback, Integer> {
