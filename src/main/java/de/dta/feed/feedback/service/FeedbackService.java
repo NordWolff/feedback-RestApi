@@ -45,8 +45,8 @@ public class FeedbackService {
         return allByUsername;
     }
 
-    public List<Feedback> searchAllFeedbackByLineId(String searchTerm) {
-        List<Feedback> allByLineId = feedbackRepository.searchAllFeedbackByLineId(searchTerm);
+    public Feedback[] searchAllFeedbackByLineId(String searchTerm) {
+        Feedback[] allByLineId = feedbackRepository.searchAllFeedbackByLineId(searchTerm);
         return allByLineId;
     }
 

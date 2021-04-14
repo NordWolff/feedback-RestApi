@@ -15,6 +15,6 @@ public interface FeedbackRepository extends CrudRepository<Feedback, Integer> {
     @Query("select c from Feedback c where c.username = :username")
     List<Feedback> findAllByUsername(String username);
 
-    @Query("select c from Feedback c where c.lineId like '%in%'")
-    List<Feedback> searchAllFeedbackByLineId(String lineId);
+    @Query("select c from Feedback c where c.lineId like %:lineId%")
+    Feedback[] searchAllFeedbackByLineId(String lineId);
 }

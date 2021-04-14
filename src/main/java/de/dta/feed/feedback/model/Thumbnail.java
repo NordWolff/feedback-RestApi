@@ -1,27 +1,38 @@
 package de.dta.feed.feedback.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 @Table(name = "V1_THUMBNAIL")
 public class Thumbnail {
 
-    //@ManyToOne
-    //@JoinColumn(name = "feedback_id")
-    //private Feedback feedback;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-
     @Column(length = 1000)
     private String url;
-
-    @Column
     private String title;
 
+    @ManyToOne
+    @JoinColumn(name = "feedback_ref", nullable = false)
+    private Feedback feedback;
+
+    @Override
+    public String toString() {
+        return "Thumbnail{" +
+                "id=" + id +
+                ", url='" + url + '\'' +
+                ", title='" + title + '\'' +
+                ", feedback=" + feedback +
+                '}';
+    }
 }

@@ -2,7 +2,6 @@ package de.dta.feed.feedback.controller;
 
 import de.dta.feed.feedback.model.Feedback;
 import de.dta.feed.feedback.model.HelloSpring;
-import de.dta.feed.feedback.model.Thumbnail;
 import de.dta.feed.feedback.service.FeedbackService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,8 +74,6 @@ public class FeedbackController {
     @PutMapping(value = "/edit")
     public ResponseEntity editFeedback(@Valid @RequestBody Feedback feedback) {
         //FeedbackMapper.MAPPER.toFeedback(feedback);
-        List<Thumbnail> thumbnailList = new ArrayList<>();
-        feedback.setThumbnails(thumbnailList);
         feedbackService.update(feedback);
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -93,16 +89,17 @@ public class FeedbackController {
     public ResponseEntity deleteFeedback(@PathVariable Integer feedbackId) {
         try {
             feedbackService.deleteCustomer(feedbackId);
+            return new ResponseEntity(HttpStatus.OK);
         } catch(EmptyResultDataAccessException emptyResultDataAccessException) {
             //When already deleted, it's ok!
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/search/{searchTerm}")
     public ResponseEntity getSearchAllWithLineId(@PathVariable String searchTerm) {
-         feedbackService.searchAllFeedbackByLineId(searchTerm);
-         return new ResponseEntity(HttpStatus.OK);
+         Feedback[] listFeedbacks = feedbackService.searchAllFeedbackByLineId(searchTerm);
+         return new ResponseEntity(listFeedbacks,HttpStatus.OK);
     }
 
 }

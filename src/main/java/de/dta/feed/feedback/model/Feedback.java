@@ -1,6 +1,9 @@
 package de.dta.feed.feedback.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -11,6 +14,9 @@ import java.util.List;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Table(name = "V1_FEEDBACK")
 public class Feedback {
 
@@ -43,7 +49,26 @@ public class Feedback {
     @NotNull(message = "Author kann nicht leer sein")
     private String author;
     private Integer rating;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "feedback")
     private List<Thumbnail> thumbnails = new ArrayList<>();
 
+    @Override
+    public String toString() {
+        return "Feedback{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", lineId='" + lineId + '\'' +
+                ", freeText='" + freeText + '\'' +
+                ", incidentSeverity='" + incidentSeverity + '\'' +
+                ", resolvedCi='" + resolvedCi + '\'' +
+                ", incidentType='" + incidentType + '\'' +
+                ", attr='" + attr + '\'' +
+                ", knownError='" + knownError + '\'' +
+                ", published=" + published +
+                ", edit=" + edit +
+                ", author='" + author + '\'' +
+                ", rating=" + rating +
+                ", thumbnails=" + thumbnails +
+                '}';
+    }
 }
