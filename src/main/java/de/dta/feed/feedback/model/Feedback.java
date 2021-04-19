@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Entity
@@ -21,7 +22,7 @@ import java.util.List;
 public class Feedback {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     private Integer id;
     @NotNull(message = "Username kann nicht leer sein")
     private String username;
@@ -50,7 +51,8 @@ public class Feedback {
     private String author;
     private Integer rating;
     @OneToMany(mappedBy = "feedback")
-    private List<Thumbnail> thumbnails = new ArrayList<>();
+    private List<Thumbnail> thumbnails;
+
 
     @Override
     public String toString() {

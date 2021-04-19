@@ -1,5 +1,6 @@
 package de.dta.feed.feedback.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,8 +23,9 @@ public class Thumbnail {
     private String url;
     private String title;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "feedback_ref", nullable = false)
+    @JsonIgnore
     private Feedback feedback;
 
     @Override

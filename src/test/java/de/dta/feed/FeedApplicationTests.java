@@ -25,22 +25,9 @@ class FeedApplicationTests {
     void contextLoads() {
         thumbnailRepository.deleteAll();
         feedbackRepository.deleteAll();
+        Thumbnail thumbnail1 = new Thumbnail();
+        Thumbnail thumbnail2 = new Thumbnail();
 
-        Thumbnail thumbnail1 = Thumbnail.builder()
-                .title("Back")
-                .url("https://api4.angular-buch.com/images/angular_auflage3.jpg")
-                .build();
-        Thumbnail thumbnail2 = Thumbnail.builder()
-                .title("Front")
-                .url("https://api4.angular-buch.com/images/angular_auflage3.jpg")
-                .build();
-
-        List<Thumbnail> thumbnailList = new ArrayList<>();
-        thumbnailList.add(thumbnail1);
-        thumbnailList.add(thumbnail2);
-
-        thumbnailRepository.save(thumbnail1);
-        thumbnailRepository.save(thumbnail2);
 
         Feedback feedback = Feedback.builder()
                 .attr("Fix/Verkabelung")
@@ -49,16 +36,30 @@ class FeedApplicationTests {
                 .incidentSeverity("häufig(jeden Tag)")
                 .incidentType("Internet Ausfall")
                 .knownError("WLAN")
-                .lineId("DEU.DTAG.KHG7F4")
+                .lineId("DEU.DTAG.KHG051")
                 .username("thomas.wolff@telekom.de")
                 .resolvedCi("KVz/Kabel zum KVz")
                 .rating(2)
-                .thumbnails(thumbnailList)
                 .build();
 
+        thumbnail1 = Thumbnail.builder()
+                .title("Back")
+                .url("https://api4.angular-buch.com/images/angular_auflage3.jpg")
+                .feedback(feedback)
+                .build();
+        thumbnail2 = Thumbnail.builder()
+                .title("Front")
+                .url("https://api4.angular-buch.com/images/angular_auflage3.jpg")
+                .feedback(feedback)
+                .build();
+
+        List<Thumbnail> thumbnailList = new ArrayList<>();
+        thumbnailList.add(thumbnail1);
+        thumbnailList.add(thumbnail2);
+
+        thumbnailRepository.saveAll(thumbnailList);
 
         feedback = feedbackRepository.save(feedback);
-
 
         System.out.println(feedback.toString());
     }

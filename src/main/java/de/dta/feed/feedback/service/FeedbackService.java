@@ -31,13 +31,18 @@ public class FeedbackService {
         return allByLineId;
     }
 
+
     @Transactional
     public void save(Feedback feedback) {
         feedbackRepository.save(feedback);
     }
 
-    public void deleteCustomer(Integer id) {
+    public void deleteById(Integer id) {
         feedbackRepository.deleteById(id);
+    }
+
+    public void deleteByLineId(String lineId) {
+        feedbackRepository.deleteByLineId(lineId);
     }
 
     public List<Feedback> getFeedbackByUsername(String username) {
@@ -45,12 +50,16 @@ public class FeedbackService {
         return allByUsername;
     }
 
-    public Feedback[] searchAllFeedbackByLineId(String searchTerm) {
-        Feedback[] allByLineId = feedbackRepository.searchAllFeedbackByLineId(searchTerm);
+    public List<Feedback> searchAllFeedbackByLineId(String searchTerm) {
+        List<Feedback> allByLineId = feedbackRepository.searchAllFeedbackByLineId(searchTerm);
         return allByLineId;
     }
 
     public void update(Feedback feedback) {
         feedbackRepository.save(feedback);
+    }
+
+    public Feedback findByLineId(String lineId) {
+      return  feedbackRepository.findByLineId(lineId);
     }
 }

@@ -2,7 +2,9 @@ package de.dta.feed.feedback.controller;
 
 import de.dta.feed.feedback.model.Feedback;
 import de.dta.feed.feedback.model.HelloSpring;
+import de.dta.feed.feedback.model.Thumbnail;
 import de.dta.feed.feedback.service.FeedbackService;
+import de.dta.feed.feedback.service.ThumbnailService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -11,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +25,9 @@ public class FeedbackController {
     @Autowired
     private FeedbackService feedbackService;
 
+    @Autowired
+    private ThumbnailService thumbnailService;
+
     @GetMapping("/welcome")
     public HelloSpring sayHello() {
         return new HelloSpring("Spring is Online");
@@ -32,7 +38,7 @@ public class FeedbackController {
             produces = "application/json",
             response = Feedback.class
     )
-    @GetMapping
+    @GetMapping(path = "/reports")
     public ResponseEntity getFeedbacks() {
         List<Feedback> feedbacks = feedbackService.getFeedbacks();
         return new ResponseEntity(feedbacks, HttpStatus.OK);
@@ -54,10 +60,10 @@ public class FeedbackController {
             produces = "application/json",
             response = Feedback.class
     )
-    @GetMapping(value = "/lineId/{lineId}")
+    @GetMapping(value = "/report/{lineId}")
     public ResponseEntity FeedbackAllByLineId(@PathVariable String lineId) {
-        List<Feedback> feedbackAllByLineId = feedbackService.getFeedbackAllByLineId(lineId);
-        return new ResponseEntity(feedbackAllByLineId, HttpStatus.OK);
+        Feedback findbyLineId = feedbackService.findByLineId(lineId);
+        return new ResponseEntity(findbyLineId, HttpStatus.OK);
     }
 
     @ApiOperation(
@@ -79,16 +85,36 @@ public class FeedbackController {
     }
 
     @PostMapping(value = "/add")
-    public ResponseEntity addFeedback(@Valid @RequestBody Feedback feedback) {
+    public ResponseEntity addFeedback(@RequestBody Feedback feedback) {
         //FeedbackMapper.MAPPER.toFeedback(feedback);
+        List<Thumbnail> thumbnails = feedback.getThumbnails();
+        feedback.getThumbnails().forEach(thumbnail -> thumbnail.setFeedback(feedback));
+
+        System.out.println(feedback.getThumbnails());
+
+        thumbnailService.saveAll(feedback.getThumbnails());
+
         feedbackService.save(feedback);
+
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/remove/{feedbackId}")
     public ResponseEntity deleteFeedback(@PathVariable Integer feedbackId) {
         try {
-            feedbackService.deleteCustomer(feedbackId);
+            feedbackService.deleteById(feedbackId);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch(EmptyResultDataAccessException emptyResultDataAccessException) {
+            //When already deleted, it's ok!
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    // http://localhost:8080/api/feedback/remove/DEU.DTAG.91KEF4
+    @DeleteMapping(value = "/delete/{lineId}")
+    public ResponseEntity deleteFeedback(@PathVariable String lineId) {
+        try {
+            feedbackService.deleteByLineId(lineId);
             return new ResponseEntity(HttpStatus.OK);
         } catch(EmptyResultDataAccessException emptyResultDataAccessException) {
             //When already deleted, it's ok!
@@ -98,7 +124,7 @@ public class FeedbackController {
 
     @GetMapping("/search/{searchTerm}")
     public ResponseEntity getSearchAllWithLineId(@PathVariable String searchTerm) {
-         Feedback[] listFeedbacks = feedbackService.searchAllFeedbackByLineId(searchTerm);
+         List<Feedback> listFeedbacks = feedbackService.searchAllFeedbackByLineId(searchTerm);
          return new ResponseEntity(listFeedbacks,HttpStatus.OK);
     }
 
