@@ -114,6 +114,10 @@ public class FeedbackController {
     @DeleteMapping(value = "/delete/{lineId}")
     public ResponseEntity deleteFeedback(@PathVariable String lineId) {
         try {
+            Feedback responseFeedback = feedbackService.findByLineId(lineId);
+            responseFeedback.getThumbnails().forEach(thumbnail -> {
+                thumbnailService.deletebyId(thumbnail.getId());
+            });
             feedbackService.deleteByLineId(lineId);
             return new ResponseEntity(HttpStatus.OK);
         } catch(EmptyResultDataAccessException emptyResultDataAccessException) {
@@ -124,8 +128,7 @@ public class FeedbackController {
 
     @GetMapping("/search/{searchTerm}")
     public ResponseEntity getSearchAllWithLineId(@PathVariable String searchTerm) {
-         List<Feedback> listFeedbacks = feedbackService.searchAllFeedbackByLineId(searchTerm);
-         return new ResponseEntity(listFeedbacks,HttpStatus.OK);
+         return new ResponseEntity(feedbackService.searchAllFeedbackByLineId(searchTerm),HttpStatus.OK);
     }
 
 }
