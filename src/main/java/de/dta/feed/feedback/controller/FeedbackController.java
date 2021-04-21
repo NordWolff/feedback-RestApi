@@ -88,13 +88,20 @@ public class FeedbackController {
     public ResponseEntity addFeedback(@RequestBody Feedback feedback) {
         //FeedbackMapper.MAPPER.toFeedback(feedback);
         Feedback saveFeedback = feedbackService.save(feedback);
-        saveFeedback.getThumbnails().forEach(thumbnail -> {thumbnail.setFeedback(saveFeedback);thumbnailService.save(thumbnail);});
-        return new ResponseEntity(HttpStatus.OK);
+        saveFeedback.getThumbnails().forEach(thumbnail -> {
+            thumbnail.setFeedback(saveFeedback);
+            thumbnailService.save(thumbnail);
+        });
+        return new ResponseEntity(HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/remove/{feedbackId}")
     public ResponseEntity deleteFeedback(@PathVariable Integer feedbackId) {
         try {
+           Feedback responseFeedback = feedbackService.findById(feedbackId);
+           responseFeedback.getThumbnails().forEach(thumbnail -> {
+               thumbnailService.deletebyId(thumbnail.getId());
+           });
             feedbackService.deleteById(feedbackId);
             return new ResponseEntity(HttpStatus.OK);
         } catch(EmptyResultDataAccessException emptyResultDataAccessException) {

@@ -3,6 +3,7 @@ package de.dta.feed.feedback.service;
 import de.dta.feed.feedback.model.Feedback;
 import de.dta.feed.feedback.model.Thumbnail;
 import de.dta.feed.feedback.repository.FeedbackRepository;
+import de.dta.feed.feedback.repository.ThumbnailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ public class FeedbackService {
     FeedbackRepository feedbackRepository;
 
     @Autowired
-    ThumbnailService thumbnailService;
+    ThumbnailRepository thumbnailRepository;
 
     public List<Feedback> getFeedbacks() {
         return feedbackRepository.findAll();
@@ -38,7 +39,6 @@ public class FeedbackService {
     @Transactional
     public Feedback save(Feedback feedback) {
         return feedbackRepository.save(feedback);
-
     }
 
     public void deleteById(Integer id) {
@@ -65,5 +65,9 @@ public class FeedbackService {
 
     public Feedback findByLineId(String lineId) {
       return  feedbackRepository.findByLineId(lineId);
+    }
+
+    public Feedback findById(Integer feedbackId) {
+        return feedbackRepository.findById(feedbackId).orElseThrow();
     }
 }

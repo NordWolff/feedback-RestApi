@@ -4,15 +4,21 @@ import de.dta.feed.feedback.model.Feedback;
 import de.dta.feed.feedback.model.Thumbnail;
 import de.dta.feed.feedback.repository.FeedbackRepository;
 import de.dta.feed.feedback.repository.ThumbnailRepository;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -24,20 +30,13 @@ class FeedApplicationTests {
     @Autowired
     private ThumbnailRepository thumbnailRepository;
 
+    private Feedback feedback;
+    List<Thumbnail> thumbnailList = new ArrayList<>();
+
+
     @BeforeEach
-    void before() {
-
-    }
-
-    @Test
-    void contextLoads() {
-        thumbnailRepository.deleteAll();
-        feedbackRepository.deleteAll();
-        Thumbnail thumbnail1 = new Thumbnail();
-        Thumbnail thumbnail2 = new Thumbnail();
-
-
-        Feedback feedback = Feedback.builder()
+    void createFeedback() {
+        feedback = Feedback.builder()
                 .attr("Fix/Verkabelung")
                 .freeText("Hier steht ein Text")
                 .author("assia@service")
@@ -50,26 +49,44 @@ class FeedApplicationTests {
                 .rating(2)
                 .build();
 
-        thumbnail1 = Thumbnail.builder()
+               feedback = feedbackRepository.save(feedback);
+    }
+
+
+    @BeforeEach
+    void createThumbnails() {
+        Thumbnail thumbnail1 = Thumbnail.builder()
                 .title("Back")
                 .url("https://api4.angular-buch.com/images/angular_auflage3.jpg")
                 .feedback(feedback)
                 .build();
-        thumbnail2 = Thumbnail.builder()
+        Thumbnail thumbnail2 = Thumbnail.builder()
                 .title("Front")
                 .url("https://api4.angular-buch.com/images/angular_auflage3.jpg")
                 .feedback(feedback)
                 .build();
 
-        List<Thumbnail> thumbnailList = new ArrayList<>();
         thumbnailList.add(thumbnail1);
         thumbnailList.add(thumbnail2);
 
-        thumbnailRepository.saveAll(thumbnailList);
+        thumbnailList.forEach(thumbnail -> thumbnailRepository.save(thumbnail));
+    }
 
-        feedback = feedbackRepository.save(feedback);
+    @Test
+    void thumbnailSizeTest() {
+      assertEquals(thumbnailList.size(),2);
+    }
 
-        System.out.println(feedback.toString());
+    @Test
+    void feedbackFindByIdTest(){
+       Optional<Feedback> testFeedback = feedbackRepository.findById(feedback.getId());
+       assertEquals(testFeedback.get().getAuthor(),"assia@service");
+    }
+
+    @AfterEach
+    void afterLoad() {
+        thumbnailRepository.deleteAll();
+        feedbackRepository.deleteAll();
     }
 
 }

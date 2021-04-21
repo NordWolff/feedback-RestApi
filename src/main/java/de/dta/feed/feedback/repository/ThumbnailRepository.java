@@ -11,4 +11,6 @@ public interface ThumbnailRepository extends CrudRepository<Thumbnail, Integer> 
 
     @Query("select c from Thumbnail c where c.feedback.lineId =:lineId")
     List<Thumbnail> findThumbnailByFeedback_lineId(@Param("lineId") String lineId);
+
+    void deleteThumbnailsByFeedback(Integer feedbackId);
 }

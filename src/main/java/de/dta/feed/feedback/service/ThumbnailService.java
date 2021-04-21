@@ -25,4 +25,8 @@ public class ThumbnailService {
     public void save(Thumbnail thumbnail) {
         thumbnailRepository.save(thumbnail);
     }
+
+    public void deletebyId(Integer id) {
+        thumbnailRepository.deleteById(id);
+    }
 }

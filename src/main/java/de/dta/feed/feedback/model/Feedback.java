@@ -1,5 +1,6 @@
 package de.dta.feed.feedback.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -50,7 +51,7 @@ public class Feedback {
     @NotNull(message = "Author kann nicht leer sein")
     private String author;
     private Integer rating;
-    @OneToMany(mappedBy = "feedback")
+    @OneToMany(mappedBy = "feedback", cascade = CascadeType.ALL)
     private List<Thumbnail> thumbnails;
 
 
