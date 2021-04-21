@@ -87,15 +87,8 @@ public class FeedbackController {
     @PostMapping(value = "/add")
     public ResponseEntity addFeedback(@RequestBody Feedback feedback) {
         //FeedbackMapper.MAPPER.toFeedback(feedback);
-        List<Thumbnail> thumbnails = feedback.getThumbnails();
-        feedback.getThumbnails().forEach(thumbnail -> thumbnail.setFeedback(feedback));
-
-        System.out.println(feedback.getThumbnails());
-
-        thumbnailService.saveAll(feedback.getThumbnails());
-
-        feedbackService.save(feedback);
-
+        Feedback saveFeedback = feedbackService.save(feedback);
+        saveFeedback.getThumbnails().forEach(thumbnail -> {thumbnail.setFeedback(saveFeedback);thumbnailService.save(thumbnail);});
         return new ResponseEntity(HttpStatus.OK);
     }
 

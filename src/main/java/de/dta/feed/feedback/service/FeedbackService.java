@@ -17,8 +17,11 @@ public class FeedbackService {
     @Autowired
     FeedbackRepository feedbackRepository;
 
+    @Autowired
+    ThumbnailService thumbnailService;
+
     public List<Feedback> getFeedbacks() {
-        return (List<Feedback>) feedbackRepository.findAll();
+        return feedbackRepository.findAll();
     }
 
     public Optional<Feedback>  getFeedbackById(Integer id) {
@@ -33,8 +36,9 @@ public class FeedbackService {
 
 
     @Transactional
-    public void save(Feedback feedback) {
-        feedbackRepository.save(feedback);
+    public Feedback save(Feedback feedback) {
+        return feedbackRepository.save(feedback);
+
     }
 
     public void deleteById(Integer id) {

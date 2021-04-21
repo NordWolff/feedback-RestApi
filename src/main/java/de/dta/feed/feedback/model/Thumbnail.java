@@ -23,8 +23,8 @@ public class Thumbnail {
     private String url;
     private String title;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "feedback_ref", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "feedback_ref")
     @JsonIgnore
     private Feedback feedback;
 

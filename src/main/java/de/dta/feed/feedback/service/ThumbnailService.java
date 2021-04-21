@@ -15,6 +15,7 @@ public class ThumbnailService {
     @Autowired
     ThumbnailRepository thumbnailRepository;
 
+
     @Transactional
     public void saveAll(List<Thumbnail> thumbnails) {
         thumbnailRepository.saveAll(thumbnails);

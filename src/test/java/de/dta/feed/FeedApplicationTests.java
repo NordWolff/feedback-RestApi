@@ -4,15 +4,18 @@ import de.dta.feed.feedback.model.Feedback;
 import de.dta.feed.feedback.model.Thumbnail;
 import de.dta.feed.feedback.repository.FeedbackRepository;
 import de.dta.feed.feedback.repository.ThumbnailRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
+@ActiveProfiles("test")
 class FeedApplicationTests {
 
     @Autowired
@@ -20,6 +23,11 @@ class FeedApplicationTests {
 
     @Autowired
     private ThumbnailRepository thumbnailRepository;
+
+    @BeforeEach
+    void before() {
+
+    }
 
     @Test
     void contextLoads() {
